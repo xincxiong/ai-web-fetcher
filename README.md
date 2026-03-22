@@ -10,8 +10,8 @@
 | 路径 | 说明 |
 |------|------|
 | `SKILL.md` | Cursor Skill 说明：何时用哪种 Fetcher、安装与 Python 示例 |
-| `scripts/extract.py` | 命令行一键拉取并导出文本（可选 CSS 选择器） |
-| `scripts/requirements.txt` | 本 Skill 推荐的 Scrapling 依赖版本 |
+| `scripts/extract.py` | 命令行拉取；纯文本或 **Markdown 文档**（`--format markdown` / `-o *.md`） |
+| `scripts/requirements.txt` | Scrapling + Markdown 导出依赖（trafilatura / markdownify / bs4） |
 | `references/scrapling-quickref.md` | 常见问题与文档链接 |
 
 ## 安装
@@ -27,20 +27,24 @@ scrapling install   # 下载浏览器，Stealthy/Dynamic 模式需要
 ## 命令行（extract.py）
 
 ```bash
-# 默认 HTTP 模式，输出到文件
+# 默认 HTTP 模式，纯文本
 python3 scripts/extract.py "https://example.com" -o out.txt
 
-# 输出到标准输出
-python3 scripts/extract.py "https://example.com" --mode http -o -
+# Markdown 文档（标题、来源、抓取时间、正文；正文优先智能抽取）
+python3 scripts/extract.py "https://example.com" --format markdown -o article.md
+python3 scripts/extract.py "https://example.com" -o article.md   # .md 后缀自动启用 markdown
 
-# 隐身模式 + CSS 抽取（适合反爬/Cloudflare 等，按需加 --solve-cloudflare）
-python3 scripts/extract.py "https://example.com" --mode stealth --css "article"
+# 标准输出
+python3 scripts/extract.py "https://example.com" --format markdown -o -
+
+# 隐身模式 + CSS 片段 → Markdown
+python3 scripts/extract.py "https://example.com" --mode stealth --css "article" --format markdown -o piece.md
 
 # 动态页面（Playwright）
-python3 scripts/extract.py "https://example.com" --mode dynamic --network-idle
+python3 scripts/extract.py "https://example.com" --mode dynamic --network-idle --format markdown -o spa.md
 ```
 
-常用参数：`--mode {http,stealth,dynamic}`、`--css`、`--network-idle`、`--solve-cloudflare`、`--no-headless`。
+常用参数：`--mode {http,stealth,dynamic}`、`--format {text,markdown}`、`--css`、`--network-idle`、`--solve-cloudflare`、`--no-headless`。
 
 ## 在 Cursor 里使用
 
