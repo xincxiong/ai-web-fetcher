@@ -1,0 +1,2 @@
+# Scrapling: parser + fetchers. Run: scrapling install (downloads browsers)
+scrapling[fetchers]>=0.4.0
